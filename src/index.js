@@ -5,10 +5,10 @@ import './index.css';
 function Square(props){
     return (
         <button 
-            className="square" 
-            onClick={props.onClick}
+          className="square" 
+          onClick={props.onClick}
         >
-            {props.value}
+          {props.value}
         </button>
     );
 }
@@ -23,6 +23,9 @@ class Board extends React.Component {
     }
     handleClick(i){
         const squares = this.state.squares.slice(); //create a copy of the squares array
+        if (calculateWinner(squares) || squares[i]) {
+          return;
+        }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             squares:squares,
@@ -38,8 +41,13 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = "Next player: " + (this.state.xIsNext ? 'X' : 'O');
-
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+          status = 'Winner:' + winner
+        } else{
+          status = 'Next player: '+ (this.state.xIsNext? 'X' : 'O')
+        }
         return (
          
         <div>
